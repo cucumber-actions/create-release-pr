@@ -18,8 +18,9 @@ jobs:
           git push origin :refs/heads/pre-release/vA.B.C
       - name: Test the action
         uses: ./
-        released_version: vX.Y.Z
-        next_version: vA.B.C
+        with:
+          released_version: vX.Y.Z
+          next_version: vA.B.C
       - name: Check for PR against the release branch
         run: |
           id = gh gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}'
