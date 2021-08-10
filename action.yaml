@@ -15,17 +15,20 @@ runs:
         git checkout v${{ inputs.released_version }}
         git checkout -b release/v${{ inputs.next_version }}
         git push --force --set-upstream origin release/v${{ inputs.next_version }}
+      shell: bash
     - name: Create/update a branch off `main` for the commit to be released
       run: |
         git checkout ${{ github.ref }}
         git checkout -b pre-release/v${{ inputs.next_version }}
         git push --force --set-upstream origin pre-release/v${{ inputs.next_version }}
+      shell: bash
     - name: Check for existing PR for this release
       id: pr-already-exists
       run: |
         output=$(gh pr list --base release/v${{ inputs.next_version }} | wc -l)
         exists=$([[ $output == "1"] && echo "true" || echo "")
         echo "::set-output name=result::$exists"
+      shell: bash
     - name: Create Pull Request
       if: ${{ !steps.pr-already-exists.outputs.result }}
       run: |
@@ -46,3 +49,4 @@ runs:
           --head pre-release/v${{ inputs.next_version }} \
           --title "Release v${{ inputs.next_version }}" \
           --body-file ${{ runner.temp }}/body
+      shell: bash
