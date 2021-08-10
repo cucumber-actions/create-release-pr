@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Delete any existing tags / branches / PRs created by the test
         run: |
-          id = gh gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}'
+          id=$(gh gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
           [ $id ] && gh pr close $id
           git push origin :refs/heads/release/vA.B.C
           git push origin :refs/heads/pre-release/vA.B.C
