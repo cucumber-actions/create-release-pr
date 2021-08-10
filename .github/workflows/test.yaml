@@ -6,8 +6,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      release_version: "vX.Y.Z"
-      next_version: "vA.B.C"
+      release_version: "X.Y.Z"
+      next_version: "A.B.C"
     steps:
       - uses: actions/checkout@v2
       - name: Delete any existing tags / branches / PRs created by the test
@@ -19,8 +19,8 @@ jobs:
       - name: Test the action
         uses: ./
         with:
-          released_version: vX.Y.Z
-          next_version: vA.B.C
+          released_version: X.Y.Z
+          next_version: A.B.C
       - name: Check for PR against the release branch
         run: |
           id = gh gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}'
