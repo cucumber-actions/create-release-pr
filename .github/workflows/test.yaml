@@ -8,6 +8,7 @@ jobs:
     env:
       release_version: "X.Y.Z"
       next_version: "A.B.C"
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Delete any existing tags / branches / PRs created by the test
