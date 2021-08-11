@@ -16,6 +16,7 @@ inputs:
     required: true
   reviewers:
     description: "Comma-separated list of GitHub user or team handles to add as reviewers to the PR"
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -58,6 +59,7 @@ runs:
 
         If you need to make changes to this release, just push more commits to the \`${branch}\` branch and this PR will be automatically updated.
         EOT
+        echo "reviewers: $INPUT_REVIEWERS"
         gh pr create \
           --base release/v${{ inputs.next_version }} \
           --head pre-release/v${{ inputs.next_version }} \
