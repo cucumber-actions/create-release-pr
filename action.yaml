@@ -63,5 +63,5 @@ runs:
           --head pre-release/v${{ inputs.next_version }} \
           --title "Release v${{ inputs.next_version }}" \
           --body-file ${{ runner.temp }}/body \
-          $([ $INPUT_REVIEWERS ] && "--reviewer $INPUT_REVIEWERS" || "")
+          $([ $INPUT_REVIEWERS ] && echo "--reviewer $INPUT_REVIEWERS" || echo "")
       shell: bash
