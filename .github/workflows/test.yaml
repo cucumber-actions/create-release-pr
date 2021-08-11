@@ -38,5 +38,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Check for PR against the release branch
         run: |
-          id = gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}'
+          id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
           [ $id ]
