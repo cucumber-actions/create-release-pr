@@ -59,11 +59,10 @@ runs:
 
         If you need to make changes to this release, just push more commits to the \`${branch}\` branch and this PR will be automatically updated.
         EOT
-        echo "reviewers: ${{ inputs.reviewers }}"
         gh pr create \
           --base release/v${{ inputs.next_version }} \
           --head pre-release/v${{ inputs.next_version }} \
           --title "Release v${{ inputs.next_version }}" \
           --body-file ${{ runner.temp }}/body \
-          $([ ${{ inputs.reviewers }}] && echo "--reviewer ${{ inputs.reviewers }}" || echo "")
+          $([ ${{ inputs.reviewers }} ] && echo "--reviewer ${{ inputs.reviewers }}" || echo "")
       shell: bash
