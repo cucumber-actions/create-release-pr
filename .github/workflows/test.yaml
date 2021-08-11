@@ -21,14 +21,17 @@ jobs:
           git push origin :refs/heads/develop
       - name: Prepare a fake commit to release
         run: |
+          git config --global user.email "github-actions@example.com"
+          git config --global user.name "GitHub Actions"
           git checkout -b develop
           touch "a-file"
           git add .
-          git config --global user.email "github-actions@example.com"
-          git config --global user.name "GitHub Actions"
-          git commit -m "Add a file"
-          git push origin develop
+          git commit -m "Add a-file"
           git tag v${{ env.release_version }}
+          touch "another-file"
+          git add .
+          git commit -m "Add another-file"
+          git push origin develop
           git push --tags
       - name: Test the action
         uses: ./
