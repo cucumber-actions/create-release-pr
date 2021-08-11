@@ -49,9 +49,10 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: develop
       - name: Create another commit and push it
         run: |
-          git checkout develop
           touch "another-file-for-the-release"
           git add .
           git commit -m "Add another-file-for-the-release"
