@@ -14,4 +14,5 @@ runs:
         git show-ref pre-release/vA.B.C && git branch -D pre-release/vA.B.C
         git show-ref develop && git branch -D develop
         git show-ref vX.Y.Z && git tag -d vX.Y.Z
+        exit 0
       shell: bash
