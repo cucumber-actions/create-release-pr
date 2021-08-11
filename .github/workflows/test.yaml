@@ -3,7 +3,8 @@ name: Test
 on: push
 
 jobs:
-  test:
+  test-create-pr:
+    name: It should create a PR
     runs-on: ubuntu-latest
     env:
       release_version: "X.Y.Z"
@@ -34,6 +35,72 @@ jobs:
           git push origin develop
           git push --tags
       - name: Test the action
+        uses: ./
+        with:
+          released_version: X.Y.Z
+          next_version: A.B.C
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ref: refs/heads/develop
+      - name: Check for PR against the release branch
+        run: |
+          id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
+          [ $id ]
+      - name: Delete any existing tags / branches / PRs created by the test
+        run: |
+          id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
+          [ $id ] && gh pr close $id
+          git push origin :refs/heads/release/vA.B.C
+          git push origin :refs/heads/pre-release/vA.B.C
+          git push origin :refs/tags/v${{ env.release_version }}
+          git push origin :refs/heads/develop
+
+  test-update-existing-pr:
+    name: It should update an existing PR
+    runs-on: ubuntu-latest
+    needs: test-create-pr
+    env:
+      release_version: "X.Y.Z"
+      next_version: "A.B.C"
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Delete any existing tags / branches / PRs created by the test previously
+        run: |
+          id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
+          [ $id ] && gh pr close $id
+          git push origin :refs/heads/release/vA.B.C
+          git push origin :refs/heads/pre-release/vA.B.C
+          git push origin :refs/tags/v${{ env.release_version }}
+          git push origin :refs/heads/develop
+      - name: Prepare a fake commit to release
+        run: |
+          git config --global user.email "github-actions@example.com"
+          git config --global user.name "GitHub Actions"
+          git checkout -b develop
+          touch "a-file"
+          git add .
+          git commit -m "Add a-file"
+          git tag v${{ env.release_version }}
+          touch "another-file"
+          git add .
+          git commit -m "Add another-file"
+          git push origin develop
+          git push --tags
+      - name: Create the release PR
+        uses: ./
+        with:
+          released_version: X.Y.Z
+          next_version: A.B.C
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ref: refs/heads/develop
+      - name: Create another commit and push it
+        run: |
+          git checkout develop
+          touch "another-file-for-the-release"
+          git add .
+          git commit -m "Add another-file-for-the-release"
+          git push origin develop
+      - name: Update the release PR
         uses: ./
         with:
           released_version: X.Y.Z
