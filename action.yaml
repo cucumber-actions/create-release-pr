@@ -31,13 +31,13 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         output=$(gh pr list --base release/v${{ inputs.next_version }} | wc -l)
-        exists=$([ $output ] && echo "true" || echo "")
-        echo "::set-output name=result::$exists"
+        echo "::set-output name=result::$output"
       shell: bash
     - name: Create Pull Request
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
+        echo "exists: ${{ steps.pr-already-exists.outputs.result }}"
         [ "${{ steps.pr-already-exists.outputs.result }}" ] && echo "PR already exists" && exit 0
         ref="${{ github.ref }}"
         branch=${ref/refs\/heads\//}
