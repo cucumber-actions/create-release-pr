@@ -10,8 +10,8 @@ runs:
         git push origin :refs/heads/pre-release/vA.B.C
         git push origin :refs/heads/develop
         git push origin :refs/tags/vX.Y.Z
-        git branch -D release/vA.B.C
-        git branch -D pre-release/vA.B.C
-        git branch -D develop
-        git tag -d vX.Y.Z
+        git show-ref release/vA.B.C && git branch -D release/vA.B.C
+        git show-ref pre-release/vA.B.C && git branch -D pre-release/vA.B.C
+        git show-ref develop && git branch -D develop
+        git show-ref vX.Y.Z && git tag -d vX.Y.Z
       shell: bash
