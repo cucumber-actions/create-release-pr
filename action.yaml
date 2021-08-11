@@ -31,7 +31,8 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         output=$(gh pr list --base release/v${{ inputs.next_version }} | wc -l)
-        echo "::set-output name=result::$output"
+        result=$([ $ output == "1" ] && echo "true" || echo "" )
+        echo "::set-output name=result::$result"
       shell: bash
     - name: Create Pull Request
       env:
