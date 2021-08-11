@@ -55,6 +55,8 @@ jobs:
         run: |
           touch "another-file-for-the-release"
           git add .
+          git config --global user.email "github-actions@example.com"
+          git config --global user.name "GitHub Actions"
           git commit -m "Add another-file-for-the-release"
           git push origin develop
       - name: Update the release PR
