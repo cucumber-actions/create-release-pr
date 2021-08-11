@@ -49,7 +49,6 @@ jobs:
     env:
       next_version: ${{ needs.versions.outputs.next-version }}
       released_version: ${{ needs.versions.outputs.released-version }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
       pull-requests: write
@@ -61,3 +60,4 @@ jobs:
         with:
           released_version: ${{ env.released_version }}
           next_version: ${{ env.next_version }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
