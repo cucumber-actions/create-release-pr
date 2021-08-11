@@ -30,8 +30,8 @@ runs:
         echo "::set-output name=result::$exists"
       shell: bash
     - name: Create Pull Request
-      if: ${{ !steps.pr-already-exists.outputs.result }}
       run: |
+        [ "${{ steps.pr-already-exists.outputs.result }}" ] && echo "PR already exists" && exit 0
         ref="${{ github.ref }}"
         branch=${ref/refs\/heads\//}
         cat >${{ runner.temp }}/body <<EOT
