@@ -12,8 +12,6 @@ inputs:
     required: true
 runs:
   using: "composite"
-  env:
-    GITHUB_TOKEN: ${{ intputs.github_token }}
   steps:
     - name: Create/update target branch for release, based on previous release
       run: |
@@ -29,12 +27,16 @@ runs:
       shell: bash
     - name: Check for existing PR for this release
       id: pr-already-exists
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         output=$(gh pr list --base release/v${{ inputs.next_version }} | wc -l)
         exists=$([[ $output == "1"] && echo "true" || echo "")
         echo "::set-output name=result::$exists"
       shell: bash
     - name: Create Pull Request
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         [ "${{ steps.pr-already-exists.outputs.result }}" ] && echo "PR already exists" && exit 0
         ref="${{ github.ref }}"
