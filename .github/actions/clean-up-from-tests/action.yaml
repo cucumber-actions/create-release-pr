@@ -6,6 +6,7 @@ runs:
     - run: |
         id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
         [ $id ] && gh pr close $id
+        git checkout main
         git push origin :refs/heads/release/vA.B.C
         git push origin :refs/heads/pre-release/vA.B.C
         git push origin :refs/heads/develop
