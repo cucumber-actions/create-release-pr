@@ -102,7 +102,7 @@ jobs:
           next_version: A.B.C
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ref: refs/heads/develop
-          reviewers: "@cucumber-actions/test"
+          reviewers: "cucumber-actions/test"
       - name: Check for PR against the release branch
         run: |
           id=$(gh pr list --base release/vA.B.C --search "reviewer: cucumber-actions/test" | awk -v col=1 '{print $col}')
