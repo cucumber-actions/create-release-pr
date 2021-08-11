@@ -12,7 +12,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-      - uses: .github/actions/clean-up-from-tests
+      - uses: ./.github/actions/clean-up-from-tests
       - name: Prepare a fake commit to release
         run: |
           git config --global user.email "github-actions@example.com"
@@ -38,7 +38,7 @@ jobs:
         run: |
           id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
           [ $id ]
-      - uses: .github/actions/clean-up-from-tests
+      - uses: ./.github/actions/clean-up-from-tests
 
   test-update-existing-pr:
     name: It should update an existing PR
