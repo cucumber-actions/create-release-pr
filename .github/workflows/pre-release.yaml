@@ -8,12 +8,15 @@ name: Pre-release
 # The workflow will automatically create a pull request for the release.
 #
 
+# We have to run this after the tests, as the tests for this particular action mess
+# around with tags and branches, and can confuse this workflow.
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
 
 jobs:
-
   versions:
     runs-on: ubuntu-latest
     name: Get version numbers
