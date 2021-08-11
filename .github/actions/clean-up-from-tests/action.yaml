@@ -1,0 +1,19 @@
+name: 'Clean up from tests'
+description: 'Delete any existing tags / branches / PRs created by the test'
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
+        [ $id ] && gh pr close $id
+        git checkout main
+        git push origin :refs/heads/release/vA.B.C
+        git push origin :refs/heads/pre-release/vA.B.C
+        git push origin :refs/heads/develop
+        git push origin :refs/tags/vX.Y.Z
+        git show-ref release/vA.B.C && git branch -D release/vA.B.C
+        git show-ref pre-release/vA.B.C && git branch -D pre-release/vA.B.C
+        git show-ref develop && git branch -D develop
+        git show-ref vX.Y.Z && git tag -d vX.Y.Z
+        exit 0
+      shell: bash
