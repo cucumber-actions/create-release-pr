@@ -12,14 +12,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-      - name: Delete any existing tags / branches / PRs created by the test previously
-        run: |
-          id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
-          [ $id ] && gh pr close $id
-          git push origin :refs/heads/release/vA.B.C
-          git push origin :refs/heads/pre-release/vA.B.C
-          git push origin :refs/tags/v${{ env.release_version }}
-          git push origin :refs/heads/develop
+      - uses: .github/actions/clean-up-from-tests
       - name: Prepare a fake commit to release
         run: |
           git config --global user.email "github-actions@example.com"
@@ -45,14 +38,7 @@ jobs:
         run: |
           id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
           [ $id ]
-      - name: Delete any existing tags / branches / PRs created by the test
-        run: |
-          id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
-          [ $id ] && gh pr close $id
-          git push origin :refs/heads/release/vA.B.C
-          git push origin :refs/heads/pre-release/vA.B.C
-          git push origin :refs/tags/v${{ env.release_version }}
-          git push origin :refs/heads/develop
+      - uses: .github/actions/clean-up-from-tests
 
   test-update-existing-pr:
     name: It should update an existing PR
