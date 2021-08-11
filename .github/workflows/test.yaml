@@ -4,7 +4,7 @@ on: push
 
 jobs:
   test-create-pr:
-    name: It should create a PR
+    name: It creates a PR
     runs-on: ubuntu-latest
     env:
       release_version: "X.Y.Z"
@@ -40,7 +40,7 @@ jobs:
           [ $id ]
 
   test-update-existing-pr:
-    name: It should update an existing PR
+    name: It updates an existing PR
     runs-on: ubuntu-latest
     needs: test-create-pr
     env:
