@@ -16,6 +16,17 @@ jobs:
           [ $id ] && gh pr close $id
           git push origin :refs/heads/release/vA.B.C
           git push origin :refs/heads/pre-release/vA.B.C
+          git push origin :refs/tags/v${{ env.release_version }}
+          git push origin :refs/heads/develop
+      - name: Prepare a fake commit to release
+        run: |
+          git checkout -b develop
+          touch "a-file"
+          git add .
+          git commit -m "Add a file"
+          git push origin develop
+          git tag v${{ env.release_version }}
+          git push --tags
       - name: Test the action
         uses: ./
         with:
