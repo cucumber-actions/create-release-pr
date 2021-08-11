@@ -14,6 +14,8 @@ inputs:
     description: "Git ref of commit to release"
     default: ${{ github.ref }}
     required: true
+  reviewers:
+    description: "Comma-separated list of GitHub user or team handles to add as reviewers to the PR"
 runs:
   using: "composite"
   steps:
@@ -60,5 +62,6 @@ runs:
           --base release/v${{ inputs.next_version }} \
           --head pre-release/v${{ inputs.next_version }} \
           --title "Release v${{ inputs.next_version }}" \
-          --body-file ${{ runner.temp }}/body
+          --body-file ${{ runner.temp }}/body \
+          $([ $INPUT_REVIEWERS ] && "--reviewer $INPUT_REVIEWERS" || "")
       shell: bash
