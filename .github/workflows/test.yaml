@@ -3,6 +3,11 @@ name: Test
 on: push
 
 jobs:
+  add-reviewer:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+        gh pr edit 38 --add-reviewer @cucumber-actions/test
   # test-create-pr:
   #   name: It creates a PR
   #   runs-on: ubuntu-latest
@@ -70,40 +75,40 @@ jobs:
   #     # It's not easy to make an assertion at this point; we could test the head of the pre-release branch
   #     - uses: ./.github/actions/clean-up-from-tests
 
-  test-add-reviewer:
-    name: It creates a PR with a reviewer
-    runs-on: ubuntu-latest
-    # needs: test-update-existing-pr
-    env:
-      release_version: "X.Y.Z"
-      next_version: "A.B.C"
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/clean-up-from-tests
-      - name: Prepare a fake commit to release
-        run: |
-          git config --global user.email "github-actions@example.com"
-          git config --global user.name "GitHub Actions"
-          git checkout -b develop
-          touch "a-file"
-          git add .
-          git commit -m "Add a-file"
-          git tag v${{ env.release_version }}
-          touch "another-file"
-          git add .
-          git commit -m "Add another-file"
-          git push origin develop
-          git push --tags
-      - name: Test the action
-        uses: ./
-        with:
-          released_version: X.Y.Z
-          next_version: A.B.C
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          ref: refs/heads/develop
-          reviewers: mattwynne
-      - name: Check for PR against the release branch
-        run: |
-          id=$(gh pr list --base release/vA.B.C --search "reviewer: cucumber-actions/test" | awk -v col=1 '{print $col}')
-          [ $id ]
+  # test-add-reviewer:
+  #   name: It creates a PR with a reviewer
+  #   runs-on: ubuntu-latest
+  #   # needs: test-update-existing-pr
+  #   env:
+  #     release_version: "X.Y.Z"
+  #     next_version: "A.B.C"
+  #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/clean-up-from-tests
+  #     - name: Prepare a fake commit to release
+  #       run: |
+  #         git config --global user.email "github-actions@example.com"
+  #         git config --global user.name "GitHub Actions"
+  #         git checkout -b develop
+  #         touch "a-file"
+  #         git add .
+  #         git commit -m "Add a-file"
+  #         git tag v${{ env.release_version }}
+  #         touch "another-file"
+  #         git add .
+  #         git commit -m "Add another-file"
+  #         git push origin develop
+  #         git push --tags
+  #     - name: Test the action
+  #       uses: ./
+  #       with:
+  #         released_version: X.Y.Z
+  #         next_version: A.B.C
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #         ref: refs/heads/develop
+  #         reviewers: mattwynne
+  #     - name: Check for PR against the release branch
+  #       run: |
+  #         id=$(gh pr list --base release/vA.B.C --search "reviewer: cucumber-actions/test" | awk -v col=1 '{print $col}')
+  #         [ $id ]
