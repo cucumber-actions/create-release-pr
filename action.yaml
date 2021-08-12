@@ -42,6 +42,7 @@ runs:
         echo "::set-output name=result::$result"
       shell: bash
     - name: Create Pull Request
+      id: create-pr
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
@@ -59,10 +60,20 @@ runs:
 
         If you need to make changes to this release, just push more commits to the \`${branch}\` branch and this PR will be automatically updated.
         EOT
-        gh pr create \
+        url=gh pr create \
           --base release/v${{ inputs.next_version }} \
           --head pre-release/v${{ inputs.next_version }} \
           --title "Release v${{ inputs.next_version }}" \
-          --body-file ${{ runner.temp }}/body \
-          $([ ${{ inputs.reviewers }} ] && echo "--reviewer ${{ inputs.reviewers }}" || echo "")
+          --body-file ${{ runner.temp }}/body
+        echo "::set-output name=url::$url"
       shell: bash
+    - name: Add reviewer
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        pr_url: ${{ steps.create-pr.outputs.url }}
+      run: |
+        [ -z "${{ inputs.reviewers}}" ] && echo "No reviewers specified" && exit 0
+        echo "Adding reviewers '${{ inputs.reviewers }}' to PR ${{ env.pr_url }}"
+        gh pr edit ${{ env.pr_url }} --add-reviewer ${{ inputs.reviewers }}
+      shell: bash
+        
