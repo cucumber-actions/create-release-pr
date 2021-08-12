@@ -6,6 +6,7 @@ jobs:
   add-reviewer:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - run: |
           gh pr edit 38 --add-reviewer @cucumber-actions/test
         env:
