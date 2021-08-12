@@ -13,5 +13,5 @@ jobs:
             --url https://api.github.com/repos/${{ github.repository }}/pulls/38/requested_reviewers \
             --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
             --header 'content-type: application/json' \
-            --data '{"team_reviewers":["@cucumber-actions/test"]}' \
+            --data '{"team_reviewers":["test"]}' \
             --fail
