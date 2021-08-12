@@ -78,6 +78,7 @@ runs:
         url="https://api.github.com/repos/${{ github.repository }}/pulls/$num/requested_reviewers"
         echo $url
         data='{"team_reviewers":["${{ inputs.reviewer_team }}"]}'
+        echo $data
         curl --request POST \
             --url $url \
             --header 'authorization: Bearer ${{ inputs.github_token }}' \
