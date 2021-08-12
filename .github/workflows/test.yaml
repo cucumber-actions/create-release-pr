@@ -73,7 +73,7 @@ jobs:
   test-add-reviewer:
     name: It creates a PR with a reviewer
     runs-on: ubuntu-latest
-    # needs: test-update-existing-pr
+    needs: test-update-existing-pr
     env:
       release_version: "X.Y.Z"
       next_version: "A.B.C"
