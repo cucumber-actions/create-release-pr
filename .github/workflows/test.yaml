@@ -74,6 +74,8 @@ jobs:
     name: It creates a PR with a reviewer
     runs-on: ubuntu-latest
     needs: test-update-existing-pr
+    permissions:
+      pull-requests: write
     env:
       release_version: "X.Y.Z"
       next_version: "A.B.C"
