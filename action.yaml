@@ -74,7 +74,7 @@ runs:
       run: |
         [ -z "${{ inputs.reviewer-team }}" ] && echo "No reviewer team specified" && exit 0
         echo "Adding reviewers '${{ inputs.reviewer-team }}' to PR ${{ env.pr_url }}"
-        num=$(echo $url | cut -d "/" -f7)
+        num=$(echo "${{ env.pr_url }}" | cut -d "/" -f7)
         url="https://api.github.com/repos/${{ github.repository }}/pulls/$num/requested_reviewers"
         echo $url
         curl --request POST \
