@@ -60,11 +60,11 @@ runs:
 
         If you need to make changes to this release, just push more commits to the \`${branch}\` branch and this PR will be automatically updated.
         EOT
-        url=gh pr create \
+        url=$(gh pr create \
           --base release/v${{ inputs.next_version }} \
           --head pre-release/v${{ inputs.next_version }} \
           --title "Release v${{ inputs.next_version }}" \
-          --body-file ${{ runner.temp }}/body
+          --body-file ${{ runner.temp }}/body)
         echo "::set-output name=url::$url"
       shell: bash
     - name: Add reviewer
