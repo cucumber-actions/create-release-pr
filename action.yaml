@@ -14,7 +14,7 @@ inputs:
     description: "Git ref of commit to release"
     default: ${{ github.ref }}
     required: true
-  reviewer-team:
+  reviewer_team:
     description: "Handle of a team in this org to add as reviewers to the PR"
     default: ""
 runs:
@@ -72,8 +72,8 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         pr_url: ${{ steps.create-pr.outputs.url }}
       run: |
-        [ -z "${{ inputs.reviewer-team }}" ] && echo "No reviewer team specified" && exit 0
-        echo "Adding reviewers '${{ inputs.reviewer-team }}' to PR ${{ env.pr_url }}"
+        [ -z "${{ inputs.reviewer_team }}" ] && echo "No reviewer team specified" && exit 0
+        echo "Adding reviewers '${{ inputs.reviewer_team }}' to PR ${{ env.pr_url }}"
         num=$(echo "${{ env.pr_url }}" | cut -d "/" -f7)
         url="https://api.github.com/repos/${{ github.repository }}/pulls/$num/requested_reviewers"
         echo $url
@@ -81,7 +81,7 @@ runs:
             --url $url \
             --header 'authorization: Bearer ${{ inputs.github_token }}' \
             --header 'content-type: application/json' \
-            --data '{"team_reviewers":["test"]}' \
+            --data '{"team_reviewers":["${{ inputs.reviewer_team }}"]}' \
             --fail
       shell: bash
         
