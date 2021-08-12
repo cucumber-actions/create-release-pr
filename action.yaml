@@ -77,11 +77,12 @@ runs:
         num=$(echo "${{ env.pr_url }}" | cut -d "/" -f7)
         url="https://api.github.com/repos/${{ github.repository }}/pulls/$num/requested_reviewers"
         echo $url
+        data='{"team_reviewers":["${{ inputs.reviewer_team }}"]}'
         curl --request POST \
             --url $url \
             --header 'authorization: Bearer ${{ inputs.github_token }}' \
             --header 'content-type: application/json' \
-            --data '{"team_reviewers":["${{ inputs.reviewer_team }}"]}' \
+            --data $data \
             --fail
       shell: bash
         
