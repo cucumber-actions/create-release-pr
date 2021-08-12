@@ -77,7 +77,7 @@ runs:
         num=$(echo $url | cut -d "/" -f7)
         curl --request POST \
             --url https://api.github.com/repos/${{ github.repository }}/pulls/$num/requested_reviewers \
-            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'authorization: Bearer ${{ inputs.github_token }}' \
             --header 'content-type: application/json' \
             --data '{"team_reviewers":["test"]}' \
             --fail
