@@ -76,6 +76,7 @@ jobs:
     needs: test-update-existing-pr
     permissions:
       pull-requests: write
+      contents: write
     env:
       release_version: "X.Y.Z"
       next_version: "A.B.C"
