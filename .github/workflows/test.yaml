@@ -8,3 +8,5 @@ jobs:
     steps:
       - run: |
           gh pr edit 38 --add-reviewer @cucumber-actions/test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
