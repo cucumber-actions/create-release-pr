@@ -3,10 +3,11 @@
 Creates a pull request for a release. We use this in the Cucumber project to add a manual
 approval step before making an automated release from the (protected) `release/*` branch.
 
-This action takes two mandatory inputs:
+This action takes three mandatory inputs:
 
 * `current_release`
 * `next_version`
+* `github_token`
 
 Both `current_release` and `next_version` should be of the form `X.Y.Z`, the [semantic version] number of the previous and next release. You can use the [`get-released-version`](https://github.com/cucumber-actions/get-released-version) action to figure out the `current_release` from tags.
 
