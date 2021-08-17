@@ -19,7 +19,13 @@ runs:
   steps:
     - name: Create/update target branch for release, based on previous release
       run: |
-        git checkout v${{ inputs.released_version }}
+        branch=${GITHUB_REF#refs/heads/}
+        base_ref=$(
+          [ "${{ inputs.released_version}}" ] \
+          && echo "v${{ inputs.released_version }}" \
+          || git rev-list $branch --reverse | head -n1
+        )
+        git checkout $base_ref
         git checkout -b release/v${{ inputs.next_version }}
         git push --force --set-upstream origin release/v${{ inputs.next_version }}
       shell: bash
@@ -39,6 +45,7 @@ runs:
         echo "::set-output name=result::$result"
       shell: bash
     - name: Create Pull Request
+      id: create-pr
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
@@ -56,9 +63,11 @@ runs:
 
         If you need to make changes to this release, just push more commits to the \`${branch}\` branch and this PR will be automatically updated.
         EOT
-        gh pr create \
+        url=$(gh pr create \
           --base release/v${{ inputs.next_version }} \
           --head pre-release/v${{ inputs.next_version }} \
           --title "Release v${{ inputs.next_version }}" \
-          --body-file ${{ runner.temp }}/body
+          --body-file ${{ runner.temp }}/body)
+        echo "::set-output name=url::$url"
       shell: bash
+        
