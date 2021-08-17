@@ -38,6 +38,7 @@ jobs:
   test-create-pr:
     name: It creates a PR
     runs-on: ubuntu-latest
+    needs: test-create-first-release
     env:
       release_version: "X.Y.Z"
       next_version: "A.B.C"
