@@ -19,7 +19,7 @@ runs:
   steps:
     - name: Create/update target branch for release, based on previous release
       run: |
-        branch=${${{github.ref}}/\/refs\/heads\/}
+        branch=${GITHUB_REF#refs/heads/}
         base_ref=$(
           [ "${{ inputs.released_version}}" ] \
           && echo "v${{ inputs.released_version }}" \
