@@ -18,7 +18,7 @@ jobs:
         run: |
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
-          git checkout -b develop
+          git checkout --orphan develop
           touch "a-file-to-release"
           git add .
           git commit -m "Add a-file-to-release"
@@ -51,7 +51,7 @@ jobs:
         run: |
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
-          git checkout -b develop
+          git checkout --orphan develop
           touch "a-file-already-released"
           git add .
           git commit -m "Add a-file-already-released"
