@@ -89,13 +89,15 @@ jobs:
           ref: develop
           fetch-depth: 0
       - name: Create another commit and push it
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CAN_PUSH_WOKRFLOWS }}
         run: |
           touch ".github/workflows/another-file-for-the-release.yaml"
           git add .
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
           git commit -m "Add another-file-for-the-release"
-          GITHUB_TOKEN=${{ secrets.GH_TOKEN_CAN_PUSH_WORKFLOWS }} git push origin develop
+          git push origin develop
       - name: Update the release PR
         uses: ./
         with:
