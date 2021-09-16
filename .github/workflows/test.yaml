@@ -103,6 +103,6 @@ jobs:
       - name: Check contents of the PR
         run: |
           id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
-          files=${gh pr view $id --json files --jq '.[] | [.[].path ]'}
+          files=$(gh pr view $id --json files --jq '.[] | [.[].path ]')
           [ $files == '["another-file","another-file-for-the-release"]' ]
       - uses: ./.github/actions/clean-up-from-tests
