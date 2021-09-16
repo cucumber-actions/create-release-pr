@@ -2,14 +2,15 @@ name: Test
 
 on: push
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   test-create-first-release:
     name: It creates a PR with all commits when releasing for the first time
     runs-on: ubuntu-latest
     env:
-      release_version: "X.Y.Z"
-      next_version: "A.B.C"
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      next_version: A.B.C
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/clean-up-from-tests
@@ -18,31 +19,31 @@ jobs:
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
           git checkout -b develop
-          touch "a-file"
+          touch "a-file-to-release"
           git add .
-          git commit -m "Add a-file"
+          git commit -m "Add a-file-to-release"
           git push origin develop
       - name: Test the action
         uses: ./
         with:
           released_version:
-          next_version: A.B.C
+          next_version: ${{ env.next_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ref: refs/heads/develop
       - name: Check for PR against the release branch
         run: |
-          id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
+          id=$(gh pr list --base release/v${{ env.next_version }} | awk -v col=1 '{print $col}')
           [ $id ]
-        # TODO: could use `gh` here to fetch commits and assert on them
+          files=$(gh pr view $id --json files --jq '.[] | [.[].path ]')
+          [ $files == '["a-file-to-release"]
 
   test-create-pr:
     name: It creates a PR
     runs-on: ubuntu-latest
     needs: test-create-first-release
     env:
-      release_version: "X.Y.Z"
-      next_version: "A.B.C"
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      released_version: X.Y.Z
+      next_version: A.B.C
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/clean-up-from-tests
@@ -51,35 +52,36 @@ jobs:
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
           git checkout -b develop
-          touch "a-file"
+          touch "a-file-already-released"
           git add .
-          git commit -m "Add a-file"
-          git tag v${{ env.release_version }}
-          touch "another-file"
+          git commit -m "Add a-file-already-released"
+          git tag v${{ env.released_version }}
+          touch "a-file-to-release"
           git add .
-          git commit -m "Add another-file"
+          git commit -m "Add a-file-to-release"
           git push origin develop
           git push --tags
       - name: Test the action
         uses: ./
         with:
-          released_version: X.Y.Z
-          next_version: A.B.C
+          released_version: ${{ env.released_version }}
+          next_version: ${{ env.next_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ref: refs/heads/develop
       - name: Check for PR against the release branch
         run: |
-          id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
+          id=$(gh pr list --base release/v${{ env.next_version }} | awk -v col=1 '{print $col}')
           [ $id ]
+          files=$(gh pr view $id --json files --jq '.[] | [.[].path ]')
+          [ $files == '["a-file-to-release"]
 
   test-update-existing-pr:
     name: It updates an existing PR
     runs-on: ubuntu-latest
     needs: test-create-pr
     env:
-      release_version: "X.Y.Z"
-      next_version: "A.B.C"
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      released_version: X.Y.Z
+      next_version: A.B.C
     steps:
       - uses: actions/checkout@v2
         with:
@@ -96,13 +98,13 @@ jobs:
       - name: Update the release PR
         uses: ./
         with:
-          released_version: X.Y.Z
-          next_version: A.B.C
+          released_version: ${{ env.released_version }}
+          next_version: ${{ env.next_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ref: refs/heads/develop
       - name: Check contents of the PR
         run: |
-          id=$(gh pr list --base release/vA.B.C | awk -v col=1 '{print $col}')
+          id=$(gh pr list --base release/v${{ env.next_version }} | awk -v col=1 '{print $col}')
           files=$(gh pr view $id --json files --jq '.[] | [.[].path ]')
-          [ $files == '["another-file","another-file-for-the-release"]' ]
+          [ $files == '["a-file-to-release","another-file-for-the-release"]' ]
       - uses: ./.github/actions/clean-up-from-tests
