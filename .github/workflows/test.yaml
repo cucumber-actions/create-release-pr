@@ -89,7 +89,7 @@ jobs:
           fetch-depth: 0
       - name: Create another commit and push it
         run: |
-          touch "another-file-for-the-release"
+          touch ".github/workflows/another-file-for-the-release.yaml"
           git add .
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
