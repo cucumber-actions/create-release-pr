@@ -74,6 +74,7 @@ jobs:
           id=$(gh pr list --base release/v${{ env.next_version }} | awk -v col=1 '{print $col}')
           [ $id ]
           files=$(gh pr view $id --json files --jq '.[] | [.[].path ]')
+          echo $files
           [ $files == '["a-file-to-release"]' ]
 
   test-update-existing-pr:
