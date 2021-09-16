@@ -2,15 +2,14 @@ name: Test
 
 on: push
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   test-create-first-release:
     name: It creates a PR with all commits when releasing for the first time
     runs-on: ubuntu-latest
+    environment: Test
     env:
       next_version: A.B.C
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CAN_PUSH_WORKFLOWS }}
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/clean-up-from-tests
@@ -41,9 +40,11 @@ jobs:
     name: It creates a PR
     runs-on: ubuntu-latest
     needs: test-create-first-release
+    environment: Test
     env:
       released_version: X.Y.Z
       next_version: A.B.C
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CAN_PUSH_WORKFLOWS }}
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/clean-up-from-tests
