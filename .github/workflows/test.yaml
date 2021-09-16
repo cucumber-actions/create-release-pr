@@ -2,8 +2,7 @@ name: Test
 
 on: push
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+environment: Test
 
 jobs:
   test-create-first-release:
@@ -94,7 +93,7 @@ jobs:
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
           git commit -m "Add another-file-for-the-release"
-          git push origin develop
+          GITHUB_TOKEN=${{ secrets.GH_TOKEN_CAN_PUSH_WORKFLOWS }} git push origin develop
       - name: Update the release PR
         uses: ./
         with:
