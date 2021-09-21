@@ -1,3 +1,5 @@
+[![Test](https://github.com/cucumber-actions/create-release-pr/actions/workflows/test.yaml/badge.svg)](https://github.com/cucumber-actions/create-release-pr/actions/workflows/test.yaml)
+
 # create-release-pr
 
 Creates a pull request for a release. We use this in the Cucumber project to add a manual
