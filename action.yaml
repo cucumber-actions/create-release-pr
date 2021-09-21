@@ -25,14 +25,12 @@ runs:
           && echo "v${{ inputs.released_version }}" \
           || git rev-list $branch --reverse | head -n1
         )
-        git checkout $base_ref
-        git checkout -b release/v${{ inputs.next_version }}
+        git branch -f release/v${{ inputs.next_version }} $base_ref
         git push --force --set-upstream origin release/v${{ inputs.next_version }}
       shell: bash
     - name: Create/update a branch off `main` for the commit to be released
       run: |
-        git checkout ${{ inputs.ref }}
-        git checkout -b pre-release/v${{ inputs.next_version }}
+        git branch -f pre-release/v${{ inputs.next_version }} ${{ inputs.ref }}
         git push --force --set-upstream origin pre-release/v${{ inputs.next_version }}
       shell: bash
     - name: Check for existing PR for this release
