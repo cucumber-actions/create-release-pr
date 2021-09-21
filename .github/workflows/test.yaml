@@ -2,6 +2,9 @@ name: Test
 
 on: push
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   test-create-first-release:
     name: It creates a PR with all commits when releasing for the first time
@@ -9,7 +12,6 @@ jobs:
     environment: Test
     env:
       next_version: A.B.C
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CAN_PUSH_WORKFLOWS }}
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/clean-up-from-tests
@@ -45,7 +47,6 @@ jobs:
     env:
       released_version: X.Y.Z
       next_version: A.B.C
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CAN_PUSH_WORKFLOWS }}
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/clean-up-from-tests
@@ -86,7 +87,6 @@ jobs:
     env:
       released_version: X.Y.Z
       next_version: A.B.C
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CAN_PUSH_WORKFLOWS }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -94,7 +94,7 @@ jobs:
           fetch-depth: 0
       - name: Create another commit and push it
         run: |
-          touch ".github/workflows/another-file-for-the-release.yaml"
+          touch another-file-for-the-release
           git add .
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
