@@ -1,4 +1,4 @@
-[![Test](https://github.com/cucumber-actions/create-release-pr/actions/workflows/test.yaml/badge.svg)](https://github.com/cucumber-actions/create-release-pr/actions/workflows/test.yaml)
+[![Test](https://github.com/cucumber/action-create-release-pr/actions/workflows/test.yaml/badge.svg)](https://github.com/cucumber/action-create-release-pr/actions/workflows/test.yaml)
 
 # create-release-pr
 
@@ -11,7 +11,7 @@ This action takes three mandatory inputs:
 * `next_version`
 * `github_token`
 
-Both `current_release` and `next_version` should be of the form `X.Y.Z`, the [semantic version] number of the previous and next release. You can use the [`get-released-version`](https://github.com/cucumber-actions/get-released-version) action to figure out the `current_release` from tags.
+Both `current_release` and `next_version` should be of the form `X.Y.Z`, the [semantic version] number of the previous and next release. You can use the [`get-versions`](https://github.com/cucumber/action-get-versions) action to figure out these versions from the git tags and CHANGELOG respectively.
 
 The action will create two branches: 
 
